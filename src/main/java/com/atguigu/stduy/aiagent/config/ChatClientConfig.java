@@ -1,5 +1,6 @@
 package com.atguigu.stduy.aiagent.config;
 
+import com.atguigu.stduy.aiagent.chatmemory.FileBasedChatMemory;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -31,15 +32,19 @@ public class ChatClientConfig {
     @Bean
     public ChatClient dashscopeChatClient()
     {
+        // 基于内存的memory
         ChatMemoryRepository repository = new InMemoryChatMemoryRepository();
-        // 基于内存的memory，最多存储10条消息
+        //持久化保存至文件的Memory
+        String fileDir = "src/main/resources/chat-memory";
+        FileBasedChatMemory fileBasedChatMemory = new FileBasedChatMemory(fileDir);
+
         MessageWindowChatMemory chatMemory = MessageWindowChatMemory.builder()
                 .chatMemoryRepository(repository)
                 .maxMessages(10).build();
 
         return ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build(),new SimpleLoggerAdvisor())
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(fileBasedChatMemory).build(),new SimpleLoggerAdvisor())
                 .build();
     }
 
