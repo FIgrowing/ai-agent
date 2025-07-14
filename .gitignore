@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 src/main/java/com/atguigu/stduy/aiagent/constant/AI.java
+src/main/resources/application.yml
 ### STS ###
 .apt_generated
 .classpath

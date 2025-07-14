@@ -31,6 +31,12 @@
         <spring-ai.version>1.0.0</spring-ai.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.github.victools</groupId>
+            <artifactId>jsonschema-generator</artifactId>
+            <version>4.38.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-core -->
 
         <dependency>
