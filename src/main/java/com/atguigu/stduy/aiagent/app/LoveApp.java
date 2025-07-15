@@ -9,6 +9,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,11 @@ public class LoveApp {
 
     @Resource
     private QueryRewriter queryRewriter;
+
+    // AI 调用工具能力
+    @Resource
+    private ToolCallback[] allTools;
+
 
     /**
      * AI 基础对话（支持多轮对话记忆）
@@ -89,6 +95,25 @@ public class LoveApp {
                 .content();
 
         log.info("content: {}", result);
+        return result;
+    }
+
+    public String doChatWithTools(String message, String chatId){
+        String result = chatClient
+                .prompt()
+                .user(message)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(new SimpleLoggerAdvisor())
+                .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).
+                        searchRequest(SearchRequest.builder()
+                                .similarityThreshold(0.5)
+                                .topK(5).build())
+                        .build())
+                //.advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
+                //.advisors(loveAppRagCloudAdvisor)
+                .toolCallbacks(allTools)
+                .call()
+                .content();
         return result;
     }
 
