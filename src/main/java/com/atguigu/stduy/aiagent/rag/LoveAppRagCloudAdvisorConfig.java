@@ -20,7 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 /**
  * 自定义基于阿里云知识库服务的 RAG 增强顾问
  */
-@Configuration
+//@Configuration
 @Slf4j
 public class LoveAppRagCloudAdvisorConfig {
 
@@ -33,20 +33,10 @@ public class LoveAppRagCloudAdvisorConfig {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-//    @Bean
-//    public DashScopeApi dashScopeApi() {
-//        return new DashScopeApi(
-//                dashScopeApiKey,
-//                null, // ApiKey 可为 null
-//                null, // MultiValueMap 可为 null
-//                null, // endpoint 可为 null
-//                restClientBuilder,
-//                webClientBuilder,
-//                null // ResponseErrorHandler 可为 null
-//        );
-//    }
 
-    @Bean
+
+
+//    @Bean
     public Advisor loveAppRagCloudAdvisor() {
         ApiKey apiKey = new ApiKey() {
             @Override

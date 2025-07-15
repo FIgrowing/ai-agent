@@ -1,5 +1,7 @@
 package com.atguigu.stduy.aiagent.app;
 
+import com.atguigu.stduy.aiagent.rag.LoveAppRagCustomAdvisorFactory;
+import com.atguigu.stduy.aiagent.rag.QueryRewriter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -7,6 +9,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +26,11 @@ public class LoveApp {
     @Resource
     private VectorStore loveAppVectorStore;
 
+//    @Resource
+//    private Advisor loveAppRagCloudAdvisor;
+
     @Resource
-    private Advisor loveAppRagCloudAdvisor;
+    private QueryRewriter queryRewriter;
 
     /**
      * AI 基础对话（支持多轮对话记忆）
@@ -69,10 +75,15 @@ public class LoveApp {
     public String doChatWithRag(String message,String chatId){
         String result = chatClient
                 .prompt()
-                .user(message)
+                .user(queryRewriter.doQueryRewrite(message))
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
                 .advisors(new SimpleLoggerAdvisor())
-                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).
+                        searchRequest(SearchRequest.builder()
+                                .similarityThreshold(0.5)
+                                .topK(5).build())
+                        .build())
+                //.advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
                 //.advisors(loveAppRagCloudAdvisor)
                 .call()
                 .content();
