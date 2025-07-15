@@ -22,4 +22,12 @@ class LoveAppTest {
     void doChat() {
         String chat = loveApp.doChat("你知道我是谁吗？只需要回答我的名字即可，除此之外不要输出其他任何内容","003");
     }
+
+    @Test
+    void doChatWithRag() {
+
+        String chatId = "100";
+        String message = "我已经结婚了，但是婚后关系不太亲密，怎么办？";
+        String answer =  loveApp.doChatWithRag(message, chatId);
+    }
 }

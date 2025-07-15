@@ -3,10 +3,15 @@ package com.atguigu.stduy.aiagent.app;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Vector;
 
 @Slf4j
 @Component
@@ -14,6 +19,12 @@ public class LoveApp {
 
     @Resource
     private ChatClient chatClient;
+
+    @Resource
+    private VectorStore loveAppVectorStore;
+
+    @Resource
+    private Advisor loveAppRagCloudAdvisor;
 
     /**
      * AI 基础对话（支持多轮对话记忆）
@@ -53,6 +64,21 @@ public class LoveApp {
                 .entity(LoveReport.class);
         log.info("loveReport: {}", loveReport);
         return loveReport;
+    }
+
+    public String doChatWithRag(String message,String chatId){
+        String result = chatClient
+                .prompt()
+                .user(message)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
+                .advisors(new SimpleLoggerAdvisor())
+                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                //.advisors(loveAppRagCloudAdvisor)
+                .call()
+                .content();
+
+        log.info("content: {}", result);
+        return result;
     }
 
 }
