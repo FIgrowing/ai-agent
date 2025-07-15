@@ -39,6 +39,15 @@
 <!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itext-core -->
+        <!-- Spring AI MCP Client -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
+        </dependency>
+
+
+
+
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
