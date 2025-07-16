@@ -51,12 +51,21 @@ class LoveAppTest {
         //testMessage("保存我的恋爱档案为文件");
 
         // 测试 PDF 生成
-        //testMessage("生成一份‘七夕约会计划’PDF，包含餐厅预订、活动流程和礼物清单");
+        testMessage("生成一份‘七夕约会计划’PDF，包含餐厅预订、活动流程和礼物清单");
     }
 
     private void testMessage(String message) {
         String chatId = UUID.randomUUID().toString();
         String answer = loveApp.doChatWithTools(message, chatId);
 
+    }
+
+    @Test
+    void doChatWithMcp() {
+        String chatId = UUID.randomUUID().toString();
+        // 测试图片搜索 MCP
+        String message = "帮我搜一些有关猫的图片";
+        String answer =  loveApp.doChatWithMcp(message, chatId);
+        System.out.println(answer);
     }
 }
