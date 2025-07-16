@@ -39,11 +39,6 @@ public class LoveApp {
     @Resource
     private ToolCallback[] allTools;
 
-    @Resource
-    private ToolCallbackProvider toolCallbackProvider;
-
-    @Resource
-    private List<McpSyncClient> mcpSyncClients;
 
 
     /**
@@ -125,23 +120,23 @@ public class LoveApp {
         return result;
     }
 
-    public String doChatWithMcp(String message, String chatId){
-        String result = chatClient
-                .prompt()
-                .user(message)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
-                .advisors(new SimpleLoggerAdvisor())
-                .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).
-                        searchRequest(SearchRequest.builder()
-                                .similarityThreshold(0.5)
-                                .topK(5).build())
-                        .build())
-                //.advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
-                //.advisors(loveAppRagCloudAdvisor)
-                .toolCallbacks(toolCallbackProvider.getToolCallbacks())
-                .call()
-                .content();
-        return result;
-    }
+//    public String doChatWithMcp(String message, String chatId){
+//        String result = chatClient
+//                .prompt()
+//                .user(message)
+//                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
+//                .advisors(new SimpleLoggerAdvisor())
+//                .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).
+//                        searchRequest(SearchRequest.builder()
+//                                .similarityThreshold(0.5)
+//                                .topK(5).build())
+//                        .build())
+//                //.advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
+//                //.advisors(loveAppRagCloudAdvisor)
+//                .toolCallbacks(toolCallbackProvider.getToolCallbacks())
+//                .call()
+//                .content();
+//        return result;
+//    }
 
 }
