@@ -1,5 +1,6 @@
 package com.atguigu.stduy.aiagent.config;
 
+import com.atguigu.stduy.aiagent.advisor.MyLoggerAdvisor;
 import com.atguigu.stduy.aiagent.chatmemory.FileBasedChatMemory;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.client.ChatClient;
@@ -44,7 +45,7 @@ public class ChatClientConfig {
 
         return ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(fileBasedChatMemory).build(),new SimpleLoggerAdvisor())
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(fileBasedChatMemory).build(),new MyLoggerAdvisor())
                 .build();
     }
 

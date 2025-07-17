@@ -1,8 +1,8 @@
 package com.atguigu.stduy.aiagent.app;
 
+import com.atguigu.stduy.aiagent.advisor.MyLoggerAdvisor;
 import com.atguigu.stduy.aiagent.rag.LoveAppRagCustomAdvisorFactory;
 import com.atguigu.stduy.aiagent.rag.QueryRewriter;
-import io.modelcontextprotocol.client.McpSyncClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -86,7 +86,7 @@ public class LoveApp {
                 .prompt()
                 .user(queryRewriter.doQueryRewrite(message))
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
-                .advisors(new SimpleLoggerAdvisor())
+                .advisors(new MyLoggerAdvisor())
                 .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).
                         searchRequest(SearchRequest.builder()
                                 .similarityThreshold(0.5)
@@ -106,7 +106,7 @@ public class LoveApp {
                 .prompt()
                 .user(message)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
-                .advisors(new SimpleLoggerAdvisor())
+                .advisors(new MyLoggerAdvisor())
                 .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).
                         searchRequest(SearchRequest.builder()
                                 .similarityThreshold(0.5)
