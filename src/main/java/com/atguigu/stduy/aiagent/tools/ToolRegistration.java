@@ -18,6 +18,7 @@ public class ToolRegistration {
     @Bean
     public ToolCallback[] allTools() {
         FileOperationTool fileOperationTool = new FileOperationTool();
+        TerminateTool terminateTool = new TerminateTool();
         WebSearchTool webSearchTool = new WebSearchTool(searchApiKey);
         WebScrapingTool webScrapingTool = new WebScrapingTool();
         ResourceDownloadTool resourceDownloadTool = new ResourceDownloadTool();
@@ -31,7 +32,8 @@ public class ToolRegistration {
                 resourceDownloadTool,
                 terminalOperationTool,
                 imageSearchTool,
-                pdfGenerationTool
+                pdfGenerationTool,
+                terminateTool
         );
     }
 }
