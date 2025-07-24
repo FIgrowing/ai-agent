@@ -31,7 +31,7 @@ public class ToolRegistration {
                 webScrapingTool,
                 resourceDownloadTool,
                 terminalOperationTool,
-                imageSearchTool,
+                //imageSearchTool,
                 pdfGenerationTool,
                 terminateTool
         );
